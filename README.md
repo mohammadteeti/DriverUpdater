@@ -92,4 +92,4 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 .\DriverUpdater.exe --admin
 
 
-![ScreenShot Here!](image.png)
+![ScreenShot Here!](https://github.com/mohammadteeti/DriverUpdater/blob/master/image.PNG)
