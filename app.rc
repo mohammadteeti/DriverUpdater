@@ -1,0 +1,4 @@
+#include "resource.h"
+
+// Embed Administrator Manifest for UAC Elevation
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "app.manifest"

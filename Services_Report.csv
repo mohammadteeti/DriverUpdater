@@ -1,0 +1,272 @@
+﻿Service Name,Display Name,Status,Start Type
+AJRouter,AllJoyn Router Service,Stopped,Manual
+ALG,Application Layer Gateway Service,Stopped,Manual
+AppIDSvc,Application Identity,Stopped,Manual
+Appinfo,Application Information,Running,Manual
+AppMgmt,Application Management,Stopped,Manual
+AppReadiness,App Readiness,Stopped,Manual
+AppVClient,Microsoft App-V Client,Stopped,Disabled
+AppXSvc,AppX Deployment Service (AppXSVC),Running,Manual
+AssignedAccessManagerSvc,AssignedAccessManager Service,Stopped,Manual
+AudioEndpointBuilder,Windows Audio Endpoint Builder,Running,Automatic
+Audiosrv,Windows Audio,Running,Automatic
+autotimesvc,Cellular Time,Stopped,Manual
+AxInstSV,ActiveX Installer (AxInstSV),Stopped,Manual
+BDESVC,BitLocker Drive Encryption Service,Stopped,Manual
+BFE,Base Filtering Engine,Running,Automatic
+BITS,Background Intelligent Transfer Service,Stopped,Manual
+Bluetooth Device Monitor,Bluetooth Device Monitor,Running,Automatic
+Bluetooth OBEX Service,Bluetooth OBEX Service,Running,Automatic
+BrokerInfrastructure,Background Tasks Infrastructure Service,Running,Automatic
+BTAGService,Bluetooth Audio Gateway Service,Stopped,Manual
+BthAvctpSvc,AVCTP service,Running,Manual
+bthserv,Bluetooth Support Service,Stopped,Manual
+camsvc,Capability Access Manager Service,Running,Manual
+CDPSvc,Connected Devices Platform Service,Running,Automatic
+CertPropSvc,Certificate Propagation,Stopped,Manual
+ClipSVC,Client License Service (ClipSVC),Running,Manual
+cloudidsvc,Microsoft Cloud Identity Service,Stopped,Manual
+COMSysApp,COM+ System Application,Stopped,Manual
+CoreMessagingRegistrar,CoreMessaging,Running,Automatic
+cphs,Intel(R) Content Protection HECI Service,Stopped,Manual
+CryptSvc,Cryptographic Services,Running,Automatic
+CscService,Offline Files,Stopped,Manual
+DcomLaunch,DCOM Server Process Launcher,Running,Automatic
+dcsvc,dcsvc,Stopped,Manual
+defragsvc,Optimize drives,Stopped,Manual
+DeviceAssociationService,Device Association Service,Running,Manual
+DeviceInstall,Device Install Service,Stopped,Manual
+DevQueryBroker,DevQuery Background Discovery Broker,Stopped,Manual
+Dhcp,DHCP Client,Running,Automatic
+diagnosticshub.standardcollector.service,Microsoft (R) Diagnostics Hub Standard Collector Service,Stopped,Manual
+diagsvc,Diagnostic Execution Service,Stopped,Manual
+DiagTrack,Connected User Experiences and Telemetry,Running,Automatic
+DialogBlockingService,DialogBlockingService,Stopped,Disabled
+DispBrokerDesktopSvc,Display Policy Service,Running,Automatic
+DisplayEnhancementService,Display Enhancement Service,Running,Manual
+DmEnrollmentSvc,Device Management Enrollment Service,Stopped,Manual
+dmwappushservice,Device Management Wireless Application Protocol (WAP) Push message Routing Service,Stopped,Manual
+Dnscache,DNS Client,Running,Automatic
+DoSvc,Delivery Optimization,Running,Automatic
+dot3svc,Wired AutoConfig,Stopped,Manual
+DPS,Diagnostic Policy Service,Running,Automatic
+DsmSvc,Device Setup Manager,Stopped,Manual
+DsSvc,Data Sharing Service,Running,Manual
+DusmSvc,Data Usage,Running,Automatic
+Eaphost,Extensible Authentication Protocol,Stopped,Manual
+edgeupdate,Microsoft Edge Update Service (edgeupdate),Stopped,Automatic
+edgeupdatem,Microsoft Edge Update Service (edgeupdatem),Stopped,Manual
+EFS,Encrypting File System (EFS),Stopped,Manual
+embeddedmode,Embedded Mode,Stopped,Manual
+EntAppSvc,Enterprise App Management Service,Stopped,Manual
+ETDService,Elan Service,Running,Automatic
+EventLog,Windows Event Log,Running,Automatic
+EventSystem,COM+ Event System,Running,Automatic
+Fax,Fax,Stopped,Manual
+fdPHost,Function Discovery Provider Host,Running,Manual
+FDResPub,Function Discovery Resource Publication,Running,Manual
+fhsvc,File History Service,Stopped,Manual
+FontCache,Windows Font Cache Service,Running,Automatic
+FrameServer,Windows Camera Frame Server,Stopped,Manual
+GameInputSvc,GameInput Service,Stopped,Manual
+gpsvc,Group Policy Client,Running,Automatic
+GraphicsPerfSvc,GraphicsPerfSvc,Stopped,Manual
+hidserv,Human Interface Device Service,Stopped,Manual
+HvHost,HV Host Service,Stopped,Manual
+icssvc,Windows Mobile Hotspot Service,Stopped,Manual
+igfxCUIService1.0.0.0,Intel(R) HD Graphics Control Panel Service,Running,Automatic
+IKEEXT,IKE and AuthIP IPsec Keying Modules,Stopped,Manual
+InstallService,Microsoft Store Install Service,Running,Manual
+Intel(R) Capability Licensing Service Interface,Intel(R) Capability Licensing Service Interface,Running,Automatic
+Intel(R) Capability Licensing Service TCP IP Interface,Intel(R) Capability Licensing Service TCP IP Interface,Stopped,Manual
+Intel(R) Wireless Bluetooth(R) 4.0 Radio Management,Intel(R) Wireless Bluetooth(R) 4.0 Radio Management,Running,Automatic
+iphlpsvc,IP Helper,Running,Automatic
+IpxlatCfgSvc,IP Translation Configuration Service,Stopped,Manual
+jhi_service,Intel(R) Dynamic Application Loader Host Interface Service,Running,Automatic
+KeyIso,CNG Key Isolation,Running,Manual
+KtmRm,KtmRm for Distributed Transaction Coordinator,Stopped,Manual
+LanmanServer,Server,Running,Automatic
+LanmanWorkstation,Workstation,Running,Automatic
+lfsvc,Geolocation Service,Running,Manual
+LicenseManager,Windows License Manager Service,Running,Manual
+lltdsvc,Link-Layer Topology Discovery Mapper,Stopped,Manual
+lmhosts,TCP/IP NetBIOS Helper,Running,Manual
+LMS,Intel(R) Management and Security Application Local Management Service,Running,Automatic
+LSM,Local Session Manager,Running,Automatic
+LxpSvc,Language Experience Service,Stopped,Manual
+MapsBroker,Downloaded Maps Manager,Stopped,Automatic
+McpManagementService,McpManagementService,Stopped,Manual
+MDCoreSvc,Microsoft Defender Core Service,Running,Automatic
+MicrosoftEdgeElevationService,Microsoft Edge Elevation Service (MicrosoftEdgeElevationService),Stopped,Manual
+MixedRealityOpenXRSvc,Windows Mixed Reality OpenXR Service,Stopped,Manual
+mpssvc,Windows Defender Firewall,Running,Automatic
+MSDTC,Distributed Transaction Coordinator,Stopped,Manual
+MSiSCSI,Microsoft iSCSI Initiator Service,Stopped,Manual
+msiserver,Windows Installer,Stopped,Manual
+MsKeyboardFilter,Microsoft Keyboard Filter,Stopped,Disabled
+NaturalAuthentication,Natural Authentication,Stopped,Manual
+NcaSvc,Network Connectivity Assistant,Stopped,Manual
+NcbService,Network Connection Broker,Running,Manual
+NcdAutoSetup,Network Connected Devices Auto-Setup,Running,Manual
+Netlogon,Netlogon,Stopped,Manual
+Netman,Network Connections,Stopped,Manual
+netprofm,Network List Service,Running,Manual
+NetSetupSvc,Network Setup Service,Stopped,Manual
+NetTcpPortSharing,Net.Tcp Port Sharing Service,Stopped,Disabled
+NgcCtnrSvc,Microsoft Passport Container,Running,Manual
+NgcSvc,Microsoft Passport,Running,Manual
+NlaSvc,Network Location Awareness,Running,Automatic
+nsi,Network Store Interface Service,Running,Automatic
+nvsvc,NVIDIA Display Driver Service,Running,Automatic
+nvUpdatusService,NVIDIA Update Service Daemon,Running,Automatic
+p2pimsvc,Peer Networking Identity Manager,Stopped,Manual
+p2psvc,Peer Networking Grouping,Stopped,Manual
+PcaSvc,Program Compatibility Assistant Service,Running,Manual
+PeerDistSvc,BranchCache,Stopped,Manual
+perceptionsimulation,Windows Perception Simulation Service,Stopped,Manual
+PerfHost,Performance Counter DLL Host,Stopped,Manual
+PhoneSvc,Phone Service,Stopped,Manual
+pla,Performance Logs & Alerts,Stopped,Manual
+PlugPlay,Plug and Play,Running,Manual
+PNRPAutoReg,PNRP Machine Name Publication Service,Stopped,Manual
+PNRPsvc,Peer Name Resolution Protocol,Stopped,Manual
+PolicyAgent,IPsec Policy Agent,Stopped,Manual
+Power,Power,Running,Automatic
+PrintNotify,Printer Extensions and Notifications,Stopped,Manual
+ProfSvc,User Profile Service,Running,Automatic
+PushToInstall,Windows PushToInstall Service,Stopped,Manual
+QWAVE,Quality Windows Audio Video Experience,Stopped,Manual
+RasAuto,Remote Access Auto Connection Manager,Stopped,Manual
+RasMan,Remote Access Connection Manager,Running,Automatic
+RemoteAccess,Routing and Remote Access,Stopped,Disabled
+RemoteRegistry,Remote Registry,Stopped,Disabled
+RetailDemo,Retail Demo Service,Stopped,Manual
+RmSvc,Radio Management Service,Running,Manual
+RpcEptMapper,RPC Endpoint Mapper,Running,Automatic
+RpcLocator,Remote Procedure Call (RPC) Locator,Stopped,Manual
+RpcSs,Remote Procedure Call (RPC),Running,Automatic
+SamSs,Security Accounts Manager,Running,Automatic
+SCardSvr,Smart Card,Stopped,Manual
+ScDeviceEnum,Smart Card Device Enumeration Service,Stopped,Manual
+Schedule,Task Scheduler,Running,Automatic
+SCPolicySvc,Smart Card Removal Policy,Stopped,Manual
+SDRSVC,Windows Backup,Stopped,Manual
+seclogon,Secondary Logon,Stopped,Manual
+SecurityHealthService,Windows Security Service,Running,Manual
+SEMgrSvc,Payments and NFC/SE Manager,Running,Manual
+SENS,System Event Notification Service,Running,Automatic
+Sense,Windows Defender Advanced Threat Protection Service,Stopped,Manual
+SensorDataService,Sensor Data Service,Stopped,Manual
+SensorService,Sensor Service,Stopped,Manual
+SensrSvc,Sensor Monitoring Service,Stopped,Manual
+SessionEnv,Remote Desktop Configuration,Stopped,Manual
+SgrmBroker,System Guard Runtime Monitor Broker,Running,Automatic
+SharedAccess,Internet Connection Sharing (ICS),Stopped,Manual
+SharedRealitySvc,Spatial Data Service,Stopped,Manual
+ShellHWDetection,Shell Hardware Detection,Running,Automatic
+shpamsvc,Shared PC Account Manager,Stopped,Disabled
+smphost,Microsoft Storage Spaces SMP,Stopped,Manual
+SmsRouter,Microsoft Windows SMS Router Service.,Stopped,Manual
+SNMPTRAP,SNMP Trap,Stopped,Manual
+spectrum,Windows Perception Service,Stopped,Manual
+Spooler,Print Spooler,Running,Automatic
+sppsvc,Software Protection,Stopped,Automatic
+SSDPSRV,SSDP Discovery,Running,Manual
+ssh-agent,OpenSSH Authentication Agent,Stopped,Disabled
+SstpSvc,Secure Socket Tunneling Protocol Service,Running,Manual
+StateRepository,State Repository Service,Running,Manual
+stisvc,Windows Image Acquisition (WIA),Stopped,Manual
+StorSvc,Storage Service,Running,Automatic
+svsvc,Spot Verifier,Stopped,Manual
+swprv,Microsoft Software Shadow Copy Provider,Stopped,Manual
+SysMain,SysMain,Stopped,Disabled
+SystemEventsBroker,System Events Broker,Running,Automatic
+TabletInputService,Touch Keyboard and Handwriting Panel Service,Running,Manual
+TapiSrv,Telephony,Stopped,Manual
+TermService,Remote Desktop Services,Stopped,Manual
+Themes,Themes,Running,Automatic
+TieringEngineService,Storage Tiers Management,Stopped,Manual
+TimeBrokerSvc,Time Broker,Running,Manual
+TokenBroker,Web Account Manager,Running,Manual
+TrkWks,Distributed Link Tracking Client,Running,Automatic
+TroubleshootingSvc,Recommended Troubleshooting Service,Stopped,Manual
+TrustedInstaller,Windows Modules Installer,Running,Automatic
+tzautoupdate,Auto Time Zone Updater,Stopped,Disabled
+UevAgentService,User Experience Virtualization Service,Stopped,Disabled
+UmRdpService,Remote Desktop Services UserMode Port Redirector,Stopped,Manual
+upnphost,UPnP Device Host,Stopped,Manual
+UserManager,User Manager,Running,Automatic
+UsoSvc,Update Orchestrator Service,Running,Automatic
+VacSvc,Volumetric Audio Compositor Service,Stopped,Manual
+VaultSvc,Credential Manager,Running,Manual
+vds,Virtual Disk,Stopped,Manual
+vmicguestinterface,Hyper-V Guest Service Interface,Stopped,Manual
+vmicheartbeat,Hyper-V Heartbeat Service,Stopped,Manual
+vmickvpexchange,Hyper-V Data Exchange Service,Stopped,Manual
+vmicrdv,Hyper-V Remote Desktop Virtualization Service,Stopped,Manual
+vmicshutdown,Hyper-V Guest Shutdown Service,Stopped,Manual
+vmictimesync,Hyper-V Time Synchronization Service,Stopped,Manual
+vmicvmsession,Hyper-V PowerShell Direct Service,Stopped,Manual
+vmicvss,Hyper-V Volume Shadow Copy Requestor,Stopped,Manual
+VSS,Volume Shadow Copy,Stopped,Manual
+W32Time,Windows Time,Stopped,Manual
+WaaSMedicSvc,Windows Update Medic Service,Stopped,Manual
+WalletService,WalletService,Stopped,Manual
+WarpJITSvc,WarpJITSvc,Stopped,Manual
+wbengine,Block Level Backup Engine Service,Stopped,Manual
+WbioSrvc,Windows Biometric Service,Stopped,Manual
+Wcmsvc,Windows Connection Manager,Running,Automatic
+wcncsvc,Windows Connect Now - Config Registrar,Stopped,Manual
+WdiServiceHost,Diagnostic Service Host,Running,Manual
+WdiSystemHost,Diagnostic System Host,Running,Manual
+WdNisSvc,Microsoft Defender Antivirus Network Inspection Service,Running,Manual
+WebClient,WebClient,Stopped,Manual
+Wecsvc,Windows Event Collector,Stopped,Manual
+WEPHOSTSVC,Windows Encryption Provider Host Service,Stopped,Manual
+wercplsupport,Problem Reports Control Panel Support,Stopped,Manual
+WerSvc,Windows Error Reporting Service,Stopped,Manual
+WFDSConMgrSvc,Wi-Fi Direct Services Connection Manager Service,Stopped,Manual
+WiaRpc,Still Image Acquisition Events,Stopped,Manual
+WinDefend,Microsoft Defender Antivirus Service,Running,Automatic
+WinHttpAutoProxySvc,WinHTTP Web Proxy Auto-Discovery Service,Running,Manual
+Winmgmt,Windows Management Instrumentation,Running,Automatic
+WinRM,Windows Remote Management (WS-Management),Stopped,Manual
+wisvc,Windows Insider Service,Stopped,Manual
+WlanSvc,WLAN AutoConfig,Running,Automatic
+wlidsvc,Microsoft Account Sign-in Assistant,Stopped,Manual
+wlpasvc,Local Profile Assistant Service,Stopped,Manual
+WManSvc,Windows Management Service,Stopped,Manual
+wmiApSrv,WMI Performance Adapter,Stopped,Manual
+WMPNetworkSvc,Windows Media Player Network Sharing Service,Stopped,Manual
+workfolderssvc,Work Folders,Stopped,Manual
+WpcMonSvc,Parental Controls,Stopped,Manual
+WPDBusEnum,Portable Device Enumerator Service,Stopped,Manual
+WpnService,Windows Push Notifications System Service,Running,Automatic
+wscsvc,Security Center,Running,Automatic
+WSearch,Windows Search,Running,Automatic
+wuauserv,Windows Update,Running,Manual
+WwanSvc,WWAN AutoConfig,Stopped,Manual
+XblAuthManager,Xbox Live Auth Manager,Stopped,Manual
+XblGameSave,Xbox Live Game Save,Stopped,Manual
+XboxGipSvc,Xbox Accessory Management Service,Stopped,Manual
+XboxNetApiSvc,Xbox Live Networking Service,Stopped,Manual
+AarSvc_5dff3,Agent Activation Runtime_5dff3,Stopped,Manual
+BcastDVRUserService_5dff3,GameDVR and Broadcast User Service_5dff3,Stopped,Manual
+BluetoothUserService_5dff3,Bluetooth User Support Service_5dff3,Stopped,Manual
+CaptureService_5dff3,CaptureService_5dff3,Stopped,Manual
+cbdhsvc_5dff3,Clipboard User Service_5dff3,Running,Manual
+CDPUserSvc_5dff3,Connected Devices Platform User Service_5dff3,Running,Automatic
+ConsentUxUserSvc_5dff3,ConsentUX_5dff3,Stopped,Manual
+CredentialEnrollmentManagerUserSvc_5dff3,CredentialEnrollmentManagerUserSvc_5dff3,Stopped,Manual
+DeviceAssociationBrokerSvc_5dff3,DeviceAssociationBroker_5dff3,Stopped,Manual
+DevicePickerUserSvc_5dff3,DevicePicker_5dff3,Stopped,Manual
+DevicesFlowUserSvc_5dff3,DevicesFlow_5dff3,Stopped,Manual
+MessagingService_5dff3,MessagingService_5dff3,Stopped,Manual
+OneSyncSvc_5dff3,Sync Host_5dff3,Running,Automatic
+PimIndexMaintenanceSvc_5dff3,Contact Data_5dff3,Running,Manual
+PrintWorkflowUserSvc_5dff3,PrintWorkflow_5dff3,Stopped,Manual
+UdkUserSvc_5dff3,Udk User Service_5dff3,Stopped,Manual
+UnistoreSvc_5dff3,User Data Storage_5dff3,Running,Manual
+UserDataSvc_5dff3,User Data Access_5dff3,Running,Manual
+WpnUserService_5dff3,Windows Push Notifications User Service_5dff3,Running,Automatic
+SUService,System Update,Running,Manual
