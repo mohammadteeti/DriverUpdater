@@ -98,7 +98,8 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 
 ## 📸 Application Screenshot
 
-![DriverUpdater Application Interface](image.PNG)
+![Screenshot](https://github.com/mohammadteeti/DriverUpdater/blob/master/image.PNG?raw=true)
+
 
 *DriverUpdater main interface showing driver scanning and management features*
 
