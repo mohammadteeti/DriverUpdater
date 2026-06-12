@@ -5,6 +5,9 @@
 #include "resource.h"
 #include "driver_scanner.h"
 #include "driver_updater.h"
+#include <iostream>
+#include <fcntl.h>
+#include <io.h>
 
 // Helper function to replace ListView_SetItemData
 void ListView_SetItemData(HWND hList, int index, LPARAM data) {
@@ -108,7 +111,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 EnableWindow(GetDlgItem(hWnd, ID_BTN_SCAN), FALSE);
                 SetWindowTextW(g_hStatus, L"Scanning hardware...");
                 SendMessage(g_hProgress, PBM_SETPOS, 0, 0);
-                // Launch background thread
                 CreateThread(NULL, 0, ScanHardwareThread, hWnd, 0, NULL);
             }
             else if (LOWORD(wParam) == ID_BTN_UPDATE_ALL) {
@@ -117,7 +119,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 
                 UpdateThreadParams* params = new UpdateThreadParams();
                 params->hWnd = hWnd;
-                // Clone the database for the worker thread to own
                 for (DeviceInfo* dev : g_deviceDatabase) {
                     DeviceInfo* clone = new DeviceInfo(*dev);
                     params->deviceList.push_back(clone);
@@ -128,9 +129,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         }
 
-        // --- Custom Thread Messages ---
         case WM_SCAN_START: {
-            SendMessage(g_hProgress, PBM_SETMARQUEE, TRUE, 0); // Indeterminate progress
+            SendMessage(g_hProgress, PBM_SETMARQUEE, TRUE, 0);
             break;
         }
         case WM_SCAN_UPDATE: {
@@ -153,7 +153,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             int processed = (int)wParam;
             DeviceInfo* updatedInfo = (DeviceInfo*)lParam;
             
-            // Find and update the list view item
             int count = ListView_GetItemCount(g_hListView);
             for (int i = 0; i < count; i++) {
                 DeviceInfo* existing = (DeviceInfo*)ListView_GetItemData(g_hListView, i);
@@ -161,15 +160,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     ListView_SetItemText(g_hListView, i, 4, (LPWSTR)updatedInfo->status.c_str());
                     ListView_SetItemText(g_hListView, i, 5, (LPWSTR)updatedInfo->action.c_str());
                     
-                    // Update our main database
                     existing->status = updatedInfo->status;
                     existing->action = updatedInfo->action;
                     existing->downloadUrl = updatedInfo->downloadUrl;
+
+                    // --- FIXED LINE: Uses pointer operator and wide console output ---
+                    std::wcout << L"Device Updated: " << existing->deviceName 
+                               << L" -> Status: " << existing->status << std::endl;
+                    
                     break;
                 }
             }
             
-            int percent = (processed * 100) / count; // Note: count logic simplified for demo
+            int percent = (count > 0) ? ((processed * 100) / count) : 0;
             SendMessage(g_hProgress, PBM_SETPOS, percent, 0);
             break;
         }
@@ -180,11 +183,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         }
 
         case WM_DESTROY: {
-            // Cleanup main thread database
             for (DeviceInfo* dev : g_deviceDatabase) {
                 delete dev;
             }
             g_deviceDatabase.clear();
+            
+            // Free allocated console before exiting
+            FreeConsole();
+            
             PostQuitMessage(0);
             break;
         }
@@ -196,6 +202,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
     g_hInst = hInstance;
+
+    // --- ALLOCATE COMMAND LINE CONSOLE WINDOW ---
+    if (AllocConsole()) {
+        FILE* fp;
+        // Redirect standard output streams to the new console window
+        freopen_s(&fp, "CONOUT$", "w", stdout);
+        freopen_s(&fp, "CONOUT$", "w", stderr);
+        
+        // Change console translation mode to handle Wide strings / Unicode correctly
+        _setmode(_fileno(stdout), _O_U16TEXT);
+    }
 
     WNDCLASSEXW wc = {0};
     wc.cbSize = sizeof(WNDCLASSEXW);
