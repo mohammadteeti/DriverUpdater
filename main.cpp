@@ -111,8 +111,8 @@ case WM_COMMAND: {
                 EnableWindow(GetDlgItem(hWnd, ID_BTN_SCAN), FALSE);
                 SetWindowTextW(g_hStatus, L"Scanning hardware...");
                 SendMessage(g_hProgress, PBM_SETPOS, 0, 0);
-<<<<<<< HEAD
-=======
+
+
                 
                 // 1. Clear the visual List View rows
                 ListView_DeleteAllItems(g_hListView);
@@ -124,7 +124,7 @@ case WM_COMMAND: {
                 g_deviceDatabase.clear(); // Empty the vector container
 
                 // 3. Launch your background thread as normal
->>>>>>> fad12a8575fe857b58ce2a051385225a3042539a
+
                 CreateThread(NULL, 0, ScanHardwareThread, hWnd, 0, NULL);
             }
             else if (LOWORD(wParam) == ID_BTN_UPDATE_ALL) {
