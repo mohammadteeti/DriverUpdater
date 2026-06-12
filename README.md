@@ -134,7 +134,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 3. **Review the device list** for status and recommendations
 4. **Click "Update All"** to begin driver updates (when implemented)
 
-<<<<<<< HEAD
+
 ---
 
 ## 📸 Application Screenshot
@@ -144,10 +144,10 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 *DriverUpdater main interface showing hardware scanning and device management features*
 
 ---
-<<<<<<< HEAD
+
 =======
 ![ScreenShot Here](https://github.com/mohammadteeti/DriverUpdater/blob/master/image.PNG)
->>>>>>> parent of 6c10f3d (add image to readme)
+
 =======
 
 ## 🏗️ Technical Architecture
@@ -230,5 +230,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using native Windows APIs and C++**
->>>>>>> fad12a8575fe857b58ce2a051385225a3042539a
+**Built with ❤️ using native Windows APIs and C++ by Eng Mohammad J Teeti**
+
