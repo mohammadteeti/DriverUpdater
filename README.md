@@ -94,6 +94,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 
 
 
+<<<<<<< HEAD
 ---
 
 ## 📸 Application Screenshot
@@ -103,3 +104,6 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 *DriverUpdater main interface showing driver scanning and management features*
 
 ---
+=======
+![ScreenShot Here](https://github.com/mohammadteeti/DriverUpdater/blob/master/image.PNG)
+>>>>>>> parent of 6c10f3d (add image to readme)
