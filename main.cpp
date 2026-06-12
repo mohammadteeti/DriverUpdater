@@ -106,11 +106,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         }
 
-        case WM_COMMAND: {
+case WM_COMMAND: {
             if (LOWORD(wParam) == ID_BTN_SCAN) {
                 EnableWindow(GetDlgItem(hWnd, ID_BTN_SCAN), FALSE);
                 SetWindowTextW(g_hStatus, L"Scanning hardware...");
                 SendMessage(g_hProgress, PBM_SETPOS, 0, 0);
+<<<<<<< HEAD
+=======
+                
+                // 1. Clear the visual List View rows
+                ListView_DeleteAllItems(g_hListView);
+
+                // 2. Clear old heap memory allocations to prevent leaks
+                for (DeviceInfo* dev : g_deviceDatabase) {
+                    delete dev;
+                }
+                g_deviceDatabase.clear(); // Empty the vector container
+
+                // 3. Launch your background thread as normal
+>>>>>>> fad12a8575fe857b58ce2a051385225a3042539a
                 CreateThread(NULL, 0, ScanHardwareThread, hWnd, 0, NULL);
             }
             else if (LOWORD(wParam) == ID_BTN_UPDATE_ALL) {
