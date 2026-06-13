@@ -79,6 +79,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 
 ### Latest Changes (June 2026)
 <<<<<<< HEAD
+<<<<<<< HEAD
 - 🚀 **Native x64 Toolchain Migration** - Fully switched to the Microsoft Visual C++ (MSVC) architecture.
 - 🌐 **WUA COM Engine Optimization** - Streamlined the PowerShell background pipeline to run inside native 64-bit wrappers for clean interaction with the Windows Update Agent.
 - ✅ **Fixed Screenshot Display** - Corrected image embedding in README for proper visualization.
@@ -86,10 +87,15 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 - ✅ **Enhanced Memory Management** - Improved device database cleanup and memory leak prevention.
 - ✅ **Better UI Responsiveness** - Optimized ListView operations and thread communication.
 =======
+=======
+>>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
 - ✅ **Fixed Screenshot Display** - Corrected image embedding in README for proper visualization
 - ✅ **ListView Auto-Clear** - ListView now clears automatically at the start of each new scan for clean results
 - ✅ **Enhanced Memory Management** - Improved device database cleanup and memory leak prevention
 - ✅ **Better UI Responsiveness** - Optimized ListView operations and thread communication
+<<<<<<< HEAD
+>>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
+=======
 >>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
 
 ## 💻 System Requirements
@@ -147,11 +153,14 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #### 1. Open the Correct Environment
 Do not use a standard Command Prompt or PowerShell terminal. Open your Windows Start Menu, then search for and launch:
 ```text
 x64 Native Tools Command Prompt for VS 2022
 =======
+=======
+>>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
 ## 📸 Application Screenshot
 
 ![Screenshot](https://github.com/mohammadteeti/DriverUpdater/blob/master/image.PNG?raw=true)
@@ -247,4 +256,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ using native Windows APIs and C++ by Eng Mohammad J Teeti**
 
+<<<<<<< HEAD
+>>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
+=======
 >>>>>>> parent of f7d7974 (update readme file acording t the new x64 build)
