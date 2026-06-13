@@ -112,31 +112,22 @@ std::wstring GetPowerShellScript(const std::wstring& hardwareId) {
     ss << L"Write-Output 'STATUS:Searching MS Catalog...'\n";
     ss << L"try {\n";
     
-    // Fallback logic to establish safe COM binding regardless of background thread context
-    ss << L"    $Session = $null\n";
-    ss << L"    try {\n";
-    ss << L"        $Session = New-Object -ComObject Microsoft.Update.Session\n";
-    ss << L"    } catch {\n";
-    ss << L"        $Type = [Type]::GetTypeFromProgID('Microsoft.Update.Session')\n";
-    ss << L"        $Session = [Activator]::CreateInstance($Type)\n";
-    ss << L"    }\n";
-    ss << L"    if (-not $Session) { throw 'Could not create Microsoft.Update.Session COM interface.' }\n";
+    // --- CLEAN NATIVE 64-BIT INVOCATION ---
+    ss << L"    $Session = New-Object -ComObject Microsoft.Update.Session\n";
+    // --------------------------------------
 
     ss << L"    $Searcher = $Session.CreateUpdateSearcher()\n";
-    
-    // Query without passing unformatted HardwareIDs to prevent the 0x80240032 engine exception
     ss << L"    $Query = \"IsInstalled=0 and Type='Driver'\"\n";
     ss << L"    $SearchResult = $Searcher.Search($Query)\n";
     
     ss << L"    $TargetHwId = '" << escapedHwId << L"'\n";
     ss << L"    $MatchedUpdates = New-Object -ComObject Microsoft.Update.UpdateCollection\n";
     
-    // Use modern array checking mechanisms inside PowerShell
     ss << L"    foreach ($Update in $SearchResult.Updates) {\n";
     ss << L"        if ($Update.Identity -and $Update.Compatibility -and ($Update.Compatibility -contains $TargetHwId)) {\n";
     ss << L"            $MatchedUpdates.Add($Update) | Out-Null\n";
     ss << L"        }\n";
-    ss << L"    }\n";
+    ss << L"    }\n"; // <-- FIXED: Both brackets are now safely inside the text generator block
     
     ss << L"    if ($MatchedUpdates.Count -eq 0) {\n";
     ss << L"        Write-Output 'STATUS:Up to Date (No MS Driver)'\n";
