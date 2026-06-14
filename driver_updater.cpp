@@ -1,168 +1,206 @@
 #include "driver_updater.h"
 #include "resource.h"
 #include <windows.h>
+#include <wuapi.h>
+#include <comdef.h>
 #include <string>
 #include <vector>
-#include <fstream>
 #include <sstream>
 #include <iostream>
 
-// Helper: Escape WQL special characters
-std::wstring EscapeForWQL(const std::wstring& input) {
-    std::wstring escaped;
-    escaped.reserve(input.length() * 2);
-    for (wchar_t c : input) {
-        if (c == L'\\') escaped += L"\\\\";
-        else if (c == L'\'') escaped += L"''";
-        else escaped += c;
+// Helper to convert lowercase or mixed strings for reliable searching
+std::wstring ToLower(const std::wstring& str) {
+    std::wstring result = str;
+    for (size_t i = 0; i < result.length(); ++i) {
+        if (result[i] >= L'A' && result[i] <= L'Z') {
+            result[i] = result[i] + 32;
+        }
     }
-    return escaped;
+    return result;
 }
 
-// Helper: Execute PowerShell script silently
-bool ExecutePowerShellScript(const std::wstring& scriptContent, std::vector<std::wstring>& outputLines) {
-    wchar_t tempPath[MAX_PATH];
-    GetTempPathW(MAX_PATH, tempPath);
-    std::wstring scriptPath = std::wstring(tempPath) + L"tt_driver_update.ps1";
-    
-    std::wofstream outFile(scriptPath.c_str());
-    if (!outFile.is_open()) return false;
-    outFile << scriptContent;
-    outFile.close();
+// Checks if a specific target hardware ID exists inside an update object's metadata or categories
+bool IsUpdateCompatible(IUpdate* pUpdate, const std::wstring& targetHwId) {
+    if (!pUpdate) return false;
 
-    SECURITY_ATTRIBUTES saAttr;
-    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-    saAttr.bInheritHandle = TRUE;
-    saAttr.lpSecurityDescriptor = NULL;
+    std::wstring lowerTarget = ToLower(targetHwId);
 
-    HANDLE hReadPipe, hWritePipe;
-    if (!CreatePipe(&hReadPipe, &hWritePipe, &saAttr, 0)) return false;
-    if (!SetHandleInformation(hReadPipe, HANDLE_FLAG_INHERIT, 0)) return false;
+    // 1. Primary Strategy: Check the Categories Collection for Hardware ID matches
+    ICategoryCollection* pCategories = nullptr;
+    HRESULT hr = pUpdate->get_Categories(&pCategories);
+    if (SUCCEEDED(hr) && pCategories) {
+        LONG count = 0;
+        pCategories->get_Count(&count);
+        
+        for (LONG i = 0; i < count; ++i) {
+            ICategory* pCategory = nullptr;
+            if (SUCCEEDED(pCategories->get_Item(i, &pCategory)) && pCategory) {
+                BSTR bstrCatName = nullptr;
+                if (SUCCEEDED(pCategory->get_Name(&bstrCatName)) && bstrCatName) {
+                    std::wstring catName = ToLower(bstrCatName);
+                    SysFreeString(bstrCatName);
 
-    STARTUPINFOW si;
-    PROCESS_INFORMATION pi;
-    ZeroMemory(&si, sizeof(si));
-    si.cb = sizeof(si);
-    si.hStdError = hWritePipe;
-    si.hStdOutput = hWritePipe;
-    si.dwFlags |= STARTF_USESTDHANDLES;
-    ZeroMemory(&pi, sizeof(pi));
-
-    // Target native 64-bit PowerShell and force it into Single-Threaded Apartment (-Sta) mode
-    std::wstring cmd = L"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -Sta -NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + L"\"";
-    std::vector<wchar_t> cmdBuf(cmd.begin(), cmd.end());
-    cmdBuf.push_back(L'\0');
-
-    // --- PAUSE 32-BIT FILE SYSTEM REDIRECTION ---
-    PVOID oldWow64Value = NULL;
-    BOOL isWow64 = FALSE;
-    IsWow64Process(GetCurrentProcess(), &isWow64);
-    
-    if (isWow64) {
-        Wow64DisableWow64FsRedirection(&oldWow64Value);
-    }
-
-    // Launch the process while the 64-bit view is temporarily unlocked
-    BOOL success = CreateProcessW(NULL, cmdBuf.data(), NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi);
-    
-    // --- RESTORE 32-BIT REDIRECTION IMMEDIATELY ---
-    if (isWow64) {
-        Wow64RevertWow64FsRedirection(oldWow64Value);
-    }
-
-    CloseHandle(hWritePipe);
-
-    if (success) {
-        DWORD bytesRead;
-        char buffer[4096];
-        std::string rawOutput;
-        while (ReadFile(hReadPipe, buffer, sizeof(buffer) - 1, &bytesRead, NULL) && bytesRead > 0) {
-            buffer[bytesRead] = '\0';
-            rawOutput += buffer;
-        }
-        WaitForSingleObject(pi.hProcess, INFINITE);
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-
-        int wlen = MultiByteToWideChar(CP_UTF8, 0, rawOutput.c_str(), -1, NULL, 0);
-        if (wlen > 0) {
-            std::vector<wchar_t> wBuf(wlen);
-            MultiByteToWideChar(CP_UTF8, 0, rawOutput.c_str(), -1, wBuf.data(), wlen);
-            std::wstring wOutput(wBuf.data());
-            std::wstringstream ss(wOutput);
-            std::wstring line;
-            while (std::getline(ss, line)) {
-                if (!line.empty() && line.back() == L'\r') line.pop_back();
-                outputLines.push_back(line);
+                    // If the hardware ID matches a category signature, we have a match
+                    if (!catName.empty() && lowerTarget.find(catName) != std::wstring::npos) {
+                        pCategory->Release();
+                        pCategories->Release();
+                        return true;
+                    }
+                }
+                pCategory->Release();
             }
         }
+        pCategories->Release();
     }
-    CloseHandle(hReadPipe);
-    DeleteFileW(scriptPath.c_str());
-    return success;
+
+    // 2. Fallback Strategy: Check the human-readable update title string
+    BSTR bstrTitle = nullptr;
+    hr = pUpdate->get_Title(&bstrTitle);
+    if (SUCCEEDED(hr) && bstrTitle) {
+        std::wstring updateTitle = ToLower(bstrTitle);
+        SysFreeString(bstrTitle);
+
+        if (!updateTitle.empty() && lowerTarget.find(updateTitle) != std::wstring::npos) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
-// Generates the safe, architecture-robust PowerShell script
-std::wstring GetPowerShellScript(const std::wstring& hardwareId) {
-    std::wstring escapedHwId = EscapeForWQL(hardwareId);
-    std::wstringstream ss;
+// Orchestrates the native Windows Update Agent lifecycle interface
+std::wstring ProcessDeviceUpdateNative(const std::wstring& hardwareId) {
+    HRESULT hr;
     
-    ss << L"[Console]::OutputEncoding = [System.Text.Encoding]::UTF8\n";
-    ss << L"$ErrorActionPreference = 'Stop'\n";
-    ss << L"Write-Output 'STATUS:Searching MS Catalog...'\n";
-    ss << L"try {\n";
-    
-    // --- CLEAN NATIVE 64-BIT INVOCATION ---
-    ss << L"    $Session = New-Object -ComObject Microsoft.Update.Session\n";
-    // --------------------------------------
+    // 1. Initialize the Update Session
+    IUpdateSession* pSession = nullptr;
+    hr = CoCreateInstance(__uuidof(UpdateSession), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pSession));
+    if (FAILED(hr)) {
+        return L"Failed (Session Init Err: 0x" + std::to_wstring(hr) + L")";
+    }
 
-    ss << L"    $Searcher = $Session.CreateUpdateSearcher()\n";
-    ss << L"    $Query = \"IsInstalled=0 and Type='Driver'\"\n";
-    ss << L"    $SearchResult = $Searcher.Search($Query)\n";
+    // 2. Create Update Searcher
+    IUpdateSearcher* pSearcher = nullptr;
+    hr = pSession->CreateUpdateSearcher(&pSearcher);
+    if (FAILED(hr)) {
+        pSession->Release();
+        return L"Failed (Searcher Init Err)";
+    }
+
+    // Query flags looking for uninstalled driver updates matching the current environment topology
+    BSTR queryStr = SysAllocString(L"IsInstalled=0 and Type='Driver'");
+    ISearchResult* pSearchResult = nullptr;
     
-    ss << L"    $TargetHwId = '" << escapedHwId << L"'\n";
-    ss << L"    $MatchedUpdates = New-Object -ComObject Microsoft.Update.UpdateCollection\n";
+    hr = pSearcher->Search(queryStr, &pSearchResult);
+    SysFreeString(queryStr);
+
+    if (FAILED(hr)) {
+        pSearcher->Release();
+        pSession->Release();
+        return L"Failed (Catalog Search Drop)";
+    }
+
+    // 3. Extract the updates group
+    IUpdateCollection* pAllUpdates = nullptr;
+    pSearchResult->get_Updates(&pAllUpdates);
     
-    ss << L"    foreach ($Update in $SearchResult.Updates) {\n";
-    ss << L"        if ($Update.Identity -and $Update.Compatibility -and ($Update.Compatibility -contains $TargetHwId)) {\n";
-    ss << L"            $MatchedUpdates.Add($Update) | Out-Null\n";
-    ss << L"        }\n";
-    ss << L"    }\n"; // <-- FIXED: Both brackets are now safely inside the text generator block
-    
-    ss << L"    if ($MatchedUpdates.Count -eq 0) {\n";
-    ss << L"        Write-Output 'STATUS:Up to Date (No MS Driver)'\n";
-    ss << L"        exit 0\n";
-    ss << L"    }\n";
-    
-    ss << L"    Write-Output 'STATUS:Downloading...'\n";
-    ss << L"    $Downloader = $Session.CreateUpdateDownloader()\n";
-    ss << L"    $Downloader.Updates = $MatchedUpdates\n";
-    ss << L"    $Downloader.Download() | Out-Null\n";
-    
-    ss << L"    Write-Output 'STATUS:Installing...'\n";
-    ss << L"    $Installer = $Session.CreateUpdateInstaller()\n";
-    ss << L"    $Installer.Updates = $MatchedUpdates\n";
-    ss << L"    $InstallResult = $Installer.Install()\n";
-    
-    ss << L"    if ($InstallResult.ResultCode -eq 2 -or $InstallResult.ResultCode -eq 3) {\n";
-    ss << L"        Write-Output 'STATUS:Updated Successfully'\n";
-    ss << L"    } else {\n";
-    ss << L"        Write-Output \"STATUS:Install Failed (Code: $($InstallResult.ResultCode))\"\n";
-    ss << L"    }\n";
-    ss << L"} catch {\n";
-    ss << L"    $CleanedMessage = $_.Exception.Message -replace '\\r|\\n', ' '\n";
-    ss << L"    Write-Output \"STATUS:Failed ($CleanedMessage)\"\n";
-    ss << L"}\n";
-    
-    return ss.str();
+    LONG totalUpdates = 0;
+    pAllUpdates->get_Count(&totalUpdates);
+
+    // Instantiate a new native COM compilation container to accumulate hardware matches
+    IUpdateCollection* pMatchedUpdates = nullptr;
+    CoCreateInstance(__uuidof(UpdateCollection), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pMatchedUpdates));
+
+    for (LONG i = 0; i < totalUpdates; ++i) {
+        IUpdate* pUpdate = nullptr;
+        if (SUCCEEDED(pAllUpdates->get_Item(i, &pUpdate)) && pUpdate) {
+            if (IsUpdateCompatible(pUpdate, hardwareId)) {
+                LONG indexAdded = 0; // Satisfies the dual argument requirement of IUpdateCollection::Add
+                pMatchedUpdates->Add(pUpdate, &indexAdded); 
+            }
+            pUpdate->Release();
+        }
+    }
+
+    LONG matchedCount = 0;
+    pMatchedUpdates->get_Count(&matchedCount);
+
+    if (matchedCount == 0) {
+        pMatchedUpdates->Release();
+        pAllUpdates->Release();
+        pSearchResult->Release();
+        pSearcher->Release();
+        pSession->Release();
+        return L"Up to Date (No MS Driver)";
+    }
+
+    // 4. Download matched updates packages
+    IUpdateDownloader* pDownloader = nullptr;
+    hr = pSession->CreateUpdateDownloader(&pDownloader);
+    if (SUCCEEDED(hr)) {
+        pDownloader->put_Updates(pMatchedUpdates);
+        IDownloadResult* pDownloadResult = nullptr;
+        hr = pDownloader->Download(&pDownloadResult);
+        
+        if (SUCCEEDED(hr)) {
+            pDownloadResult->Release();
+        }
+        pDownloader->Release();
+    }
+
+    if (FAILED(hr)) {
+        pMatchedUpdates->Release();
+        pAllUpdates->Release();
+        pSearchResult->Release();
+        pSearcher->Release();
+        pSession->Release();
+        return L"Failed (Download Timeout)";
+    }
+
+    // 5. Install the staging drivers payload
+    std::wstring finalStatus = L"Updated Successfully";
+    IUpdateInstaller* pInstaller = nullptr;
+    hr = pSession->CreateUpdateInstaller(&pInstaller);
+    if (SUCCEEDED(hr)) {
+        pInstaller->put_Updates(pMatchedUpdates);
+        IInstallationResult* pInstallResult = nullptr;
+        hr = pInstaller->Install(&pInstallResult);
+        
+        if (SUCCEEDED(hr)) {
+            OperationResultCode resCode; 
+            pInstallResult->get_ResultCode(&resCode);
+            
+            if (resCode != orcSucceeded && resCode != orcSucceededWithErrors) {
+                std::wstringstream wss;
+                wss << L"Install Failed (Code: " << resCode << L")";
+                finalStatus = wss.str(); 
+            }
+            pInstallResult->Release();
+        } else {
+            finalStatus = L"Install Exception (0x" + std::to_wstring(hr) + L")";
+        }
+        pInstaller->Release();
+    }
+
+    // Comprehensive Interface Destruction Chain
+    pMatchedUpdates->Release();
+    pAllUpdates->Release();
+    pSearchResult->Release();
+    pSearcher->Release();
+    pSession->Release();
+
+    return finalStatus;
 }
 
+// Thread Entry Point orchestration engine
 DWORD WINAPI UpdateDriversThread(LPVOID lpParam) {
     UpdateThreadParams* params = (UpdateThreadParams*)lpParam;
     HWND hWnd = params->hWnd;
+    
+    HRESULT comHr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    
     PostMessage(hWnd, WM_INSTALL_START, 0, 0);
 
-    int total = params->deviceList.size();
     int processed = 0;
 
     for (DeviceInfo* device : params->deviceList) {
@@ -175,35 +213,33 @@ DWORD WINAPI UpdateDriversThread(LPVOID lpParam) {
                 continue; 
             }
 
-            std::wstring script = GetPowerShellScript(device->hardwareId);
-            std::vector<std::wstring> outputLines;
+            device->status = L"Searching MS Catalog...";
+            device->action = L"Processing...";
+            PostMessage(hWnd, WM_INSTALL_UPDATE, (WPARAM)processed, (LPARAM)device);
+
+            std::wstring executionResult = ProcessDeviceUpdateNative(device->hardwareId);
             
-            if (ExecutePowerShellScript(script, outputLines)) {
-                for (const std::wstring& line : outputLines) {
-                    if (line.find(L"STATUS:") == 0) {
-                        std::wstring status = line.substr(7);
-                        device->status = status;
-                        
-                        if (status == L"Updated Successfully") device->action = L"Done";
-                        else if (status == L"Up to Date (No MS Driver)") device->action = L"Up to Date";
-                        else if (status.find(L"Failed") != std::wstring::npos || status.find(L"Error") != std::wstring::npos) device->action = L"Error";
-                        else device->action = L"Processing...";
-                        
-                        PostMessage(hWnd, WM_INSTALL_UPDATE, (WPARAM)processed, (LPARAM)device);
-                    }
-                }
+            device->status = executionResult;
+            if (executionResult == L"Updated Successfully") {
+                device->action = L"Done";
+            } else if (executionResult == L"Up to Date (No MS Driver)") {
+                device->action = L"Up to Date";
             } else {
-                device->status = L"Execution Failed";
-                device->action = L"PowerShell Err";
-                PostMessage(hWnd, WM_INSTALL_UPDATE, (WPARAM)processed, (LPARAM)device);
+                device->action = L"Error";
             }
+
+            PostMessage(hWnd, WM_INSTALL_UPDATE, (WPARAM)processed, (LPARAM)device);
         }
         processed++;
-        PostMessage(hWnd, WM_INSTALL_UPDATE, (WPARAM)processed, (LPARAM)device);
+    }
+
+    if (SUCCEEDED(comHr)) {
+        CoUninitialize();
     }
 
     for (DeviceInfo* device : params->deviceList) delete device;
     delete params;
+    
     PostMessage(hWnd, WM_INSTALL_COMPLETE, 0, 0);
     return 0;
 }
