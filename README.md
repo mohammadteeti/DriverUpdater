@@ -35,7 +35,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 - 🖥️ **Hardware compatibility** - Automatically ensures compatible driver versions
 
 ---
-
+<a id="key-features"></a>
 ## ✨ Key Features
 
 ### 🔎 Comprehensive Device Scanning
@@ -79,7 +79,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 - Administrator privilege enforcement via manifest
 
 ---
-
+<a id="recent-updates"></a>
 ## 🆕 Recent Updates
 
 ### Latest Changes (June 2026)
@@ -91,7 +91,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 - ✅ **Better UI Responsiveness** - Optimized ListView operations and thread communication
 
 ---
-
+<a id="system-requirements"></a>
 ## 💻 System Requirements
 
 ### Minimum Requirements
@@ -102,7 +102,7 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 - **Permissions**: Administrator privileges required (UAC Elevated)
 
 ---
-
+<a id="building--installation"></a>
 ## 📥 Building & Installation
 
 ### ⚠️ IMPORTANT: Compiler Toolchain Warning
@@ -140,6 +140,7 @@ Execute the following complete command using cl.exe. This enforces native Unicod
 ```DOS
 cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp app.res /Fe:DriverUpdater.exe urlmon.lib comctl32.lib setupapi.lib newdev.lib winhttp.lib cfgmgr32.lib user32.lib gdi32.lib advapi32.lib ole32.lib oleaut32.lib
 ```
+<a id="quick-start"></a>
 # 🚀 Quick Start
 
 1. **Launch the Application**
@@ -177,7 +178,7 @@ cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp
   <em>DriverUpdater main interface displaying hardware detection, driver status analysis, and automated update management.</em>
 </p>
 ---
-
+<a id="technical-architecture"></a>
 # 🏗️ Technical Architecture
 
 ## Core Components
@@ -263,7 +264,7 @@ cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp
 | `gdi32.lib`    | Graphics and rendering support            |
 
 ---
-
+<a id="troubleshooting"></a>
 # 🐛 Troubleshooting
 
 ## Error: `0x80040154 - Class not registered`
@@ -299,7 +300,7 @@ cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp
 * Hardware detection services are functioning normally.
 
 ---
-
+<a id="contributing"></a>
 # 📝 Contributing
 
 Contributions are welcome and greatly appreciated.
@@ -313,7 +314,7 @@ Feel free to submit Pull Requests for:
 * Documentation updates
 
 ---
-
+<a id="license"></a>
 # 📄 License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for additional details.
