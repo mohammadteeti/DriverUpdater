@@ -167,8 +167,15 @@ cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp
 
 # 📸 Application Screenshot
 
-*DriverUpdater main interface displaying hardware detection, device status monitoring, and automated driver management capabilities.*
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mohammadteeti/DriverUpdater/master/image.PNG"
+       alt="DriverUpdater Main Interface"
+       width="900">
+</p>
 
+<p align="center">
+  <em>DriverUpdater main interface displaying hardware detection, driver status analysis, and automated update management.</em>
+</p>
 ---
 
 # 🏗️ Technical Architecture
