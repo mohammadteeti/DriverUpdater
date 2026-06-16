@@ -140,104 +140,183 @@ Execute the following complete command using cl.exe. This enforces native Unicod
 ```DOS
 cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp app.res /Fe:DriverUpdater.exe urlmon.lib comctl32.lib setupapi.lib newdev.lib winhttp.lib cfgmgr32.lib user32.lib gdi32.lib advapi32.lib ole32.lib oleaut32.lib
 ```
-🚀 Quick Start
-Launch the application by right-clicking DriverUpdater.exe and selecting "Run as Administrator".
+# 🚀 Quick Start
 
-Click "Scan Hardware" to begin device detection.
+1. **Launch the Application**
 
-The ListView will clear and populate with detected devices.
+   * Right-click **DriverUpdater.exe**
+   * Select **Run as Administrator**
 
-Progress bar tracks system discovery live.
+2. **Scan Your Hardware**
 
-Review the device list for status errors and recommendations.
+   * Click **Scan Hardware** to begin device detection.
+   * The device list will automatically clear and populate with detected hardware.
+   * Monitor scan progress in real time using the integrated progress bar.
 
-Click "Update All" to trigger the background automated installation script.
+3. **Review Results**
 
-📸 Application Screenshot
-DriverUpdater main interface showing hardware scanning and device management features
+   * Examine detected devices and their current status.
+   * Identify missing, outdated, or problematic drivers.
 
-🏗️ Technical Architecture
-Core Components
-Main Application (main.cpp)
+4. **Update Drivers**
 
-Windows native GUI using Win32 API
+   * Click **Update All** to initiate the automated background update process.
+   * Driver installation tasks are executed asynchronously to maintain UI responsiveness.
 
-Window message processing and event handling
+---
 
-ListView management for device display
+# 📸 Application Screenshot
 
-Thread-safe UI updates via PostMessage
+*DriverUpdater main interface displaying hardware detection, device status monitoring, and automated driver management capabilities.*
 
-Driver Scanner (driver_scanner.cpp)
+---
 
-Hardware detection using SetupDi* functions
+# 🏗️ Technical Architecture
 
-Registry queries via advapi32 for structural driver profiles
+## Core Components
 
-Device status checking via Configuration Manager
+### Main Application (`main.cpp`)
 
-Background thread implementation for non-blocking scans
+* Native Windows desktop application built with the **Win32 API**
+* Window creation, message processing, and event handling
+* ListView-based device management interface
+* Thread-safe UI communication using `PostMessage`
+* Real-time status and progress updates
 
-Driver Updater (driver_updater.cpp)
+### Driver Scanner (`driver_scanner.cpp`)
 
-Background script orchestration targeting native 64-bit powershell.exe
+* Hardware enumeration using Windows **SetupAPI**
+* Registry inspection through **Advapi32**
+* Device health and status analysis via **Configuration Manager**
+* Dedicated background scanning thread for non-blocking operation
 
-Bypasses file system redirection (Wow64DisableWow64FsRedirection) to access native system tools safely
+### Driver Updater (`driver_updater.cpp`)
 
-Asynchronous updates managed cleanly via worker threads
+* Automated update orchestration using native **64-bit PowerShell**
+* Safe access to system utilities through `Wow64DisableWow64FsRedirection`
+* Background execution managed by worker threads
+* Responsive and asynchronous installation workflow
 
-Threading Model
-Main Thread: Handles all UI operations and window messages
+---
 
-Scanner Thread: Performs hardware enumeration
+## Threading Model
 
-Update Thread: Handles driver downloads and installation
+| Thread             | Responsibility                                         |
+| ------------------ | ------------------------------------------------------ |
+| **Main Thread**    | UI rendering, user interaction, and message processing |
+| **Scanner Thread** | Hardware detection and device enumeration              |
+| **Update Thread**  | Driver download and installation tasks                 |
+| **Message System** | Thread communication via `PostMessage`                 |
 
-Message-Based Communication: Threads communicate with main window via PostMessage
+---
 
-🔧 Technical Details
-Key APIs Used
-Windows Setup API: SetupDiGetClassDevs, SetupDiEnumDeviceInfo
+# 🔧 Technical Details
 
-Configuration Manager: CM_Get_DevNode_Status
+## Key Windows APIs
 
-Registry API: RegOpenKeyExW, RegQueryValueExW, RegCloseKey
+### SetupAPI
 
-Common Controls: ListView, Progress Bar, Static Text
+* `SetupDiGetClassDevs`
+* `SetupDiEnumDeviceInfo`
 
-Threading: CreateThread, PostMessage
+### Configuration Manager
 
-Explicit Link Libraries
-setupapi.lib - Hardware enumeration hooks
+* `CM_Get_DevNode_Status`
 
-newdev.lib - Core device installation extensions
+### Registry API
 
-comctl32.lib - Windows visual common controls framework
+* `RegOpenKeyExW`
+* `RegQueryValueExW`
+* `RegCloseKey`
 
-advapi32.lib - Advanced Registry services API mapping
+### Common Controls
 
-winhttp.lib - HTTP backend management
+* ListView
+* Progress Bar
+* Static Text
 
-🐛 Troubleshooting
-Error: 0x80040154 Class not registered
-Ensure you did not compile with MinGW or Dev-C++ 32-bit profiles. Follow the MSVC x64 build steps precisely.
+### Threading
 
-Ensure you launched the executable with Administrator privileges.
+* `CreateThread`
+* `PostMessage`
 
-Application won't start
-Check that your Windows version is compatible (Windows 10 Build 1809+)
+---
 
-Verify your system is x64 architecture
+## Linked System Libraries
 
-Scan shows no devices
-Make sure Administrator privileges are granted
+| Library        | Purpose                                   |
+| -------------- | ----------------------------------------- |
+| `setupapi.lib` | Hardware enumeration and device discovery |
+| `newdev.lib`   | Device installation and update support    |
+| `comctl32.lib` | Windows common controls                   |
+| `advapi32.lib` | Registry and advanced system services     |
+| `winhttp.lib`  | HTTP networking backend                   |
+| `cfgmgr32.lib` | Configuration Manager integration         |
+| `user32.lib`   | Core Windows UI functionality             |
+| `gdi32.lib`    | Graphics and rendering support            |
 
-Check Device Manager to confirm your system has active devices
+---
 
-📝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request with bug fixes, performance optimizations, or UI updates.
+# 🐛 Troubleshooting
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Error: `0x80040154 - Class not registered`
 
-Built with ❤️ using native Windows APIs and C++ by Eng Mohammad J Teeti
+**Possible Causes**
+
+* Application compiled using MinGW or a 32-bit toolchain.
+* Missing administrator privileges.
+
+**Solution**
+
+* Build the project using **MSVC x64** as documented.
+* Launch the application using **Run as Administrator**.
+
+---
+
+## Application Won't Start
+
+**Verify**
+
+* Windows 10 (Build 1809+) or newer.
+* 64-bit Windows installation.
+* Required system components are available.
+
+---
+
+## Scan Shows No Devices
+
+**Check**
+
+* Administrator privileges are enabled.
+* Devices are visible in Windows Device Manager.
+* Hardware detection services are functioning normally.
+
+---
+
+# 📝 Contributing
+
+Contributions are welcome and greatly appreciated.
+
+Feel free to submit Pull Requests for:
+
+* Bug fixes
+* Performance improvements
+* UI enhancements
+* Code refactoring
+* Documentation updates
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for additional details.
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Native Windows APIs and Modern C++**
+
+*By Eng. Mohammad J. Teeti*
+
+</div>
