@@ -118,24 +118,28 @@ Whether you're maintaining a single workstation or managing a fleet of computers
 #### 1. Open the Correct Environment
 Do not use a standard Command Prompt or PowerShell terminal. Open your Windows Start Menu, then search for and launch:
 ```text
-
 x64 Native Tools Command Prompt for VS 2022
+```
 2. Clone and Navigate to the Repository
-Bash
+```Bash
 git clone [https://github.com/mohammadteeti/DriverUpdater.git](https://github.com/mohammadteeti/DriverUpdater.git)
+
 cd DriverUpdater
+```
 3. Compile the Application Resources
 Compile the system application definitions and UAC manifest using the Microsoft Resource Compiler (rc.exe):
 
-DOS
+```DOS
 rc.exe app.rc
+```
 Note: This generates a compiled binary resource file named app.res.
 
 4. Compile the 64-Bit Binary via MSVC
 Execute the following complete command using cl.exe. This enforces native Unicode support (/DUNICODE) and links the explicit structural system libraries needed for registry mapping and device management:
 
-DOS
-cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp app.res /Fe:DriverUpdater.exe urlmon.lib comctl32.lib setupapi.lib newdev.lib winhttp.lib cfgmgr32.lib user32.lib gdi32.lib advapi32.lib
+```DOS
+cl.exe /EHsc /DUNICODE /D_UNICODE main.cpp driver_scanner.cpp driver_updater.cpp app.res /Fe:DriverUpdater.exe urlmon.lib comctl32.lib setupapi.lib newdev.lib winhttp.lib cfgmgr32.lib user32.lib gdi32.lib advapi32.lib ole32.lib oleaut32.lib
+```
 🚀 Quick Start
 Launch the application by right-clicking DriverUpdater.exe and selecting "Run as Administrator".
 
