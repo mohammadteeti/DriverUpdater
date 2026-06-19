@@ -7,7 +7,6 @@
 #include <vector>
 #include "driver_scanner.h"
 
-// Move the struct definition here so main.cpp can see it!
 struct UpdateThreadParams {
     HWND hWnd;
     std::vector<DeviceInfo*> deviceList;

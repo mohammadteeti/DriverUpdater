@@ -11,7 +11,8 @@
 struct DeviceInfo {
     std::wstring deviceName;
     std::wstring className;
-    std::wstring hardwareId;
+    std::wstring hardwareId;              // First (most specific) hardware ID - used for display
+    std::vector<std::wstring> hardwareIds; // FIX #2: All hardware IDs from the multi-string property
     std::wstring driverVersion;
     std::wstring driverDate;
     std::wstring status;
