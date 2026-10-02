@@ -69,9 +69,22 @@ void AddDeviceToListView(DeviceInfo* pInfo) {
     ListView_SetItemText(g_hListView, index, 4, (LPWSTR)pInfo->status.c_str());
     ListView_SetItemText(g_hListView, index, 5, (LPWSTR)pInfo->action.c_str());
 
-    // Store pointer in item data for later retrieval during update
+    // Store pointer in item data for later retrieval during update / sorting
     ListView_SetItemData(g_hListView, index, (LPARAM)pInfo);
     g_deviceDatabase.push_back(pInfo);
+}
+
+// Callback function for sorting ListView items by Device Name (A to Z)
+int CALLBACK CompareByDeviceName(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort) {
+    DeviceInfo* pInfo1 = (DeviceInfo*)lParam1;
+    DeviceInfo* pInfo2 = (DeviceInfo*)lParam2;
+
+    if (!pInfo1 || !pInfo2) return 0;
+
+    // Perform case-insensitive wide-string comparison using Windows API
+    return CompareStringW(LOCALE_USER_DEFAULT, LINGUISTIC_IGNORECASE, 
+                          pInfo1->deviceName.c_str(), -1, 
+                          pInfo2->deviceName.c_str(), -1) - CSTR_EQUAL;
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -143,6 +156,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             break;
         }
 
+        case WM_NOTIFY: {
+            LPNMHDR lpNmHdr = (LPNMHDR)lParam;
+            
+            // Check if notification is from our ListView control
+            if (lpNmHdr->idFrom == ID_LIST_DEVICES) {
+                switch (lpNmHdr->code) {
+                    case LVN_COLUMNCLICK: {
+                        LPNMLISTVIEW pnmv = (LPNMLISTVIEW)lParam;
+                        
+                        // Column 0 corresponds to "Device Name"
+                        if (pnmv->iSubItem == 0) {
+                            ListView_SortItems(g_hListView, CompareByDeviceName, 0);
+                        }
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+
         case WM_SCAN_START: {
             SendMessage(g_hProgress, PBM_SETMARQUEE, TRUE, 0);
             break;
@@ -176,7 +209,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 DeviceInfo* existing = (DeviceInfo*)ListView_GetItemData(g_hListView, i);
                 if (!existing) continue;
 
-                // FIX #2 (UI side): Match on any of the hardware IDs in the list,
+                // Match on any of the hardware IDs in the list,
                 // not just the first string. This keeps the UI in sync when the
                 // updater matched via a less-specific hardware ID.
                 bool matched = false;
